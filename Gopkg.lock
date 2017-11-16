@@ -14,6 +14,12 @@
   revision = "ecdeabc65495df2dec95d7c4a4c3e021903035e5"
 
 [[projects]]
+  branch = "master"
+  name = "github.com/gorilla/websocket"
+  packages = ["."]
+  revision = "7ca4275b84a9d500f68971c8c4a97f0ec18eb889"
+
+[[projects]]
   name = "github.com/gravitational/trace"
   packages = ["."]
   revision = "77f42dab0785f2fa2923c08cba5c37dec0687572"
@@ -106,6 +112,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "3d39f8dd9f1e20d1d30660d88a08ea907cd2b9db15a1dfcde2f0ce35015c833e"
+  inputs-digest = "01c150717be65cd94bbc249e574420289ff4539e48578712ab65f7b5116641c9"
   solver-name = "gps-cdcl"
   solver-version = 1
