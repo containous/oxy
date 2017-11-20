@@ -300,18 +300,18 @@ func (f *httpForwarder) serveWebSocket(w http.ResponseWriter, req *http.Request,
 				return
 			}
 
-			conn, _, err := hijacker.Hijack()
-			if err != nil {
+			conn, _, errHijack := hijacker.Hijack()
+			if errHijack != nil {
 				log.Errorf("vulcand/oxy/forward/websocket: Failed to hijack responseWriter")
-				ctx.errHandler.ServeHTTP(w, req, err)
+				ctx.errHandler.ServeHTTP(w, req, errHijack)
 				return
 			}
 			defer conn.Close()
 
-			err = resp.Write(conn)
-			if err != nil {
+			errWrite := resp.Write(conn)
+			if errWrite != nil {
 				log.Errorf("vulcand/oxy/forward/websocket: Failed to forward response")
-				ctx.errHandler.ServeHTTP(w, req, err)
+				ctx.errHandler.ServeHTTP(w, req, errWrite)
 				return
 			}
 		}
@@ -334,13 +334,13 @@ func (f *httpForwarder) serveWebSocket(w http.ResponseWriter, req *http.Request,
 
 	errc := make(chan error, 2)
 	replicate := func(dst io.Writer, src io.Reader, dstName string, srcName string) {
-		_, err := io.Copy(dst, src)
-		if err != nil {
-			f.log.Errorf("vulcand/oxy/forward/websocket: Error when copying from %s to %s using io.Copy: %v", srcName, dstName, err)
+		_, errCopy := io.Copy(dst, src)
+		if errCopy != nil {
+			f.log.Errorf("vulcand/oxy/forward/websocket: Error when copying from %s to %s using io.Copy: %v", srcName, dstName, errCopy)
 		} else {
 			f.log.Infof("vulcand/oxy/forward/websocket: Copying from %s to %s using io.Copy completed without error.", srcName, dstName)
 		}
-		errc <- err
+		errc <- errCopy
 	}
 
 	go replicate(targetConn.UnderlyingConn(), underlyingConn.UnderlyingConn(), "backend", "client")

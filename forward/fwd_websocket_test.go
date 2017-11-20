@@ -301,7 +301,7 @@ func (s *FwdSuite) TestWebSocketUpgradeFailed(c *C) {
 	req.Write(conn)
 
 	br = bufio.NewReader(conn)
-	resp, err = http.ReadResponse(br, req)
+	_, err = http.ReadResponse(br, req)
 	c.Assert(err, Equals, io.ErrUnexpectedEOF)
 }
 

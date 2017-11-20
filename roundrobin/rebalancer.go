@@ -244,11 +244,11 @@ func (rb *Rebalancer) upsertServer(u *url.URL, weight int) error {
 	return nil
 }
 
-func (r *Rebalancer) findServer(u *url.URL) (*rbServer, int) {
-	if len(r.servers) == 0 {
+func (rb *Rebalancer) findServer(u *url.URL) (*rbServer, int) {
+	if len(rb.servers) == 0 {
 		return nil, -1
 	}
-	for i, s := range r.servers {
+	for i, s := range rb.servers {
 		if sameURL(u, s.url) {
 			return s, i
 		}
@@ -351,7 +351,7 @@ func (rb *Rebalancer) markServers() bool {
 }
 
 func (rb *Rebalancer) convergeWeights() bool {
-	// If we have previoulsy changed servers try to restore weights to the original state
+	// If we have previously changed servers try to restore weights to the original state
 	changed := false
 	for _, s := range rb.servers {
 		if s.origWeight == s.curWeight {
