@@ -36,17 +36,16 @@ Examples of a buffering middleware:
 package buffer
 
 import (
+	"bufio"
 	"fmt"
 	"io"
 	"io/ioutil"
-	"net/http"
-
-	"bufio"
 	"net"
+	"net/http"
 	"reflect"
 
+	log "github.com/Sirupsen/logrus"
 	"github.com/mailgun/multibuf"
-	log "github.com/sirupsen/logrus"
 	"github.com/vulcand/oxy/utils"
 )
 

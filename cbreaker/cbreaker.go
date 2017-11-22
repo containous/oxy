@@ -31,7 +31,7 @@ import (
 	"sync"
 	"time"
 
-	log "github.com/sirupsen/logrus"
+	log "github.com/Sirupsen/logrus"
 
 	"github.com/mailgun/timetools"
 	"github.com/vulcand/oxy/memmetrics"

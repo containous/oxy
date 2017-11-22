@@ -9,13 +9,11 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"testing"
-
-	"github.com/vulcand/oxy/forward"
-	"github.com/vulcand/oxy/testutils"
-
 	"time"
 
-	log "github.com/sirupsen/logrus"
+	log "github.com/Sirupsen/logrus"
+	"github.com/vulcand/oxy/forward"
+	"github.com/vulcand/oxy/testutils"
 	. "gopkg.in/check.v1"
 )
 

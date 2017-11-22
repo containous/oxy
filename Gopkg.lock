@@ -2,6 +2,11 @@
 
 
 [[projects]]
+  name = "github.com/Sirupsen/logrus"
+  packages = ["."]
+  revision = "10f801ebc38b33738c9d17d50860f484a0988ff5"
+
+[[projects]]
   branch = "master"
   name = "github.com/codahale/hdrhistogram"
   packages = ["."]
@@ -20,10 +25,11 @@
   revision = "7ca4275b84a9d500f68971c8c4a97f0ec18eb889"
 
 [[projects]]
+  branch = "containous-fork"
   name = "github.com/gravitational/trace"
   packages = ["."]
-  revision = "77f42dab0785f2fa2923c08cba5c37dec0687572"
-  version = "1.1.2"
+  revision = "2e97bafa26c8befcc4243f2cffa5fb8532555d4e"
+  source = "github.com/containous/trace"
 
 [[projects]]
   branch = "master"
@@ -62,12 +68,6 @@
   version = "v1.0.0"
 
 [[projects]]
-  name = "github.com/sirupsen/logrus"
-  packages = ["."]
-  revision = "f006c2ac4710855cf0f916dd6b77acf6b048dc6e"
-  version = "v1.0.3"
-
-[[projects]]
   name = "github.com/stretchr/testify"
   packages = ["assert"]
   revision = "69483b4bd14f5845b5a1e55bca19e954e827f1d0"
@@ -81,12 +81,6 @@
 
 [[projects]]
   branch = "master"
-  name = "golang.org/x/crypto"
-  packages = ["ssh/terminal"]
-  revision = "6a293f2d4b14b8e6d3f0539e383f6d0d30fce3fd"
-
-[[projects]]
-  branch = "master"
   name = "golang.org/x/net"
   packages = ["context","websocket"]
   revision = "a337091b0525af65de94df2eb7e98bd9962dcbe2"
@@ -94,7 +88,7 @@
 [[projects]]
   branch = "master"
   name = "golang.org/x/sys"
-  packages = ["unix","windows"]
+  packages = ["unix"]
   revision = "1e2299c37cc91a509f1b12369872d27be0ce98a6"
 
 [[projects]]
@@ -112,6 +106,6 @@
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "01c150717be65cd94bbc249e574420289ff4539e48578712ab65f7b5116641c9"
+  inputs-digest = "783b171ff4eb8c94a2d351f590b091974f07d3d47b03f50d13fac168af5dde96"
   solver-name = "gps-cdcl"
   solver-version = 1
