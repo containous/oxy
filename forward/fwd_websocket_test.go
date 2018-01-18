@@ -8,7 +8,6 @@ import (
 	"net"
 	"net/http"
 	"net/http/httptest"
-	"strings"
 	"time"
 
 	gorillawebsocket "github.com/gorilla/websocket"
@@ -50,108 +49,6 @@ func (s *FwdSuite) TestWebSocketEcho(c *C) {
 	conn.WriteMessage(gorillawebsocket.TextMessage, []byte("OK"))
 	c.Log(conn.ReadMessage())
 
-}
-
-func (s *FwdSuite) TestWebSocketWithCompress(c *C) {
-	f, err := New()
-	c.Assert(err, IsNil)
-
-	upgrader := gorillawebsocket.Upgrader{CheckOrigin: func(r *http.Request) bool {
-		return true
-	}}
-	upgrader.EnableCompression = true
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		c, err := upgrader.Upgrade(w, r, nil)
-		if err != nil {
-			return
-		}
-		defer c.Close()
-		for {
-			mt, message, err := c.ReadMessage()
-			if err != nil {
-				break
-			}
-			err = c.WriteMessage(mt, message)
-			if err != nil {
-				break
-			}
-		}
-	}))
-	defer srv.Close()
-
-	proxy := testutils.NewHandler(func(w http.ResponseWriter, req *http.Request) {
-		req.URL = testutils.ParseURI(srv.URL)
-		f.ServeHTTP(w, req)
-	})
-	serverAddr := proxy.Listener.Addr().String()
-	c.Log(serverAddr)
-	headers := http.Header{}
-	webSocketURL := "ws://" + serverAddr + "/ws"
-	headers.Add("Origin", webSocketURL)
-	dialer := gorillawebsocket.DefaultDialer
-	dialer.EnableCompression = true
-	conn, resp, err := dialer.Dial(webSocketURL, headers)
-	if err != nil {
-		c.Errorf("Error [%s] during Dial with response: %+v", err, resp)
-		return
-	}
-	conn.WriteMessage(gorillawebsocket.TextMessage, []byte("OK"))
-	c.Log(conn.ReadMessage())
-
-	isCompress := strings.Contains(resp.Header.Get("Sec-Websocket-Extensions"), "permessage-deflate")
-
-	c.Assert(isCompress, Equals, true)
-}
-
-func (s *FwdSuite) TestWebSocketWithNoCompressOnServer(c *C) {
-	f, err := New()
-	c.Assert(err, IsNil)
-
-	upgrader := gorillawebsocket.Upgrader{CheckOrigin: func(r *http.Request) bool {
-		return true
-	}}
-	upgrader.EnableCompression = false
-	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		c, err := upgrader.Upgrade(w, r, nil)
-		if err != nil {
-			return
-		}
-		defer c.Close()
-		for {
-			mt, message, err := c.ReadMessage()
-			if err != nil {
-				break
-			}
-			err = c.WriteMessage(mt, message)
-			if err != nil {
-				break
-			}
-		}
-	}))
-	defer srv.Close()
-
-	proxy := testutils.NewHandler(func(w http.ResponseWriter, req *http.Request) {
-		req.URL = testutils.ParseURI(srv.URL)
-		f.ServeHTTP(w, req)
-	})
-	serverAddr := proxy.Listener.Addr().String()
-	c.Log(serverAddr)
-	headers := http.Header{}
-	webSocketURL := "ws://" + serverAddr + "/ws"
-	headers.Add("Origin", webSocketURL)
-	dialer := gorillawebsocket.DefaultDialer
-	dialer.EnableCompression = true
-	conn, resp, err := dialer.Dial(webSocketURL, headers)
-	if err != nil {
-		c.Errorf("Error [%s] during Dial with response: %+v", err, resp)
-		return
-	}
-	conn.WriteMessage(gorillawebsocket.TextMessage, []byte("OK"))
-	c.Log(conn.ReadMessage())
-
-	isCompress := strings.Contains(resp.Header.Get("Sec-Websocket-Extensions"), "permessage-deflate")
-
-	c.Assert(isCompress, Equals, false)
 }
 
 func (s *FwdSuite) TestWebSocketServerWithoutCheckOrigin(c *C) {
